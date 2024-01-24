@@ -6,6 +6,12 @@ import 'package:frigo/features/Authentication/presentation/pages/Register/regist
 import 'package:frigo/features/Authentication/presentation/pages/SecturityVerify/secturity_verify_view.dart';
 import 'package:frigo/features/Authentication/presentation/pages/Splash/auth_splash_view.dart';
 import 'package:frigo/features/Authentication/presentation/pages/Success/success_view.dart';
+import 'package:frigo/features/Company/presentation/pages/company_application_processes_view.dart';
+import 'package:frigo/features/Company/presentation/pages/company_application_skip_view.dart';
+import 'package:frigo/features/Company/presentation/pages/company_make_application2_view.dart';
+import 'package:frigo/features/Company/presentation/pages/company_make_application_view.dart';
+import 'package:frigo/features/Company/presentation/pages/company_success_view.dart';
+import 'package:frigo/features/Company/presentation/pages/company_type_select_view.dart';
 import 'package:frigo/features/Splash/presentation/pages/easy_splash_view.dart';
 import 'package:frigo/features/splash/presentation/pages/splash_view.dart';
 
@@ -26,7 +32,15 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: SecturityVerifyRoute.page, initial: false),
     AutoRoute(page: CreatePasswordRoute.page, initial: false),
     AutoRoute(page: SuccessRoute.page, initial: false),
-    AutoRoute(page: EasySplashRoute.page, initial: true),
+    AutoRoute(page: EasySplashRoute.page, initial: false),
+    AutoRoute(page: CompanyApplicationProcessesRoute.page, initial: false),
+    AutoRoute(page: CompanyApplicationSkipRoute.page, initial: false),
+    AutoRoute(page: CompanyTypeSelectRoute.page, initial: false),
+    AutoRoute(page: CompanyMakeApplicationRoute.page, initial: false),
+    AutoRoute(page: CompanyMakeApplication2Route.page, initial: false),
+    AutoRoute(page: CompanySuccessRoute.page, initial: true),
+
+
        
 
 

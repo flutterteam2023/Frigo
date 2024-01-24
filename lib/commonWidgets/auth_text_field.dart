@@ -5,13 +5,15 @@ import 'package:frigo/constant/app_color.dart';
 
 class AuthTextField extends StatelessWidget {
   const AuthTextField({
-    super.key, required this.text, required this.hintText, required this.keyboardType, required this.obscureText, required this.controller,
+    super.key, required this.text, required this.hintText, required this.keyboardType, required this.obscureText, required this.controller, this.minLines, this.maxLines,
   });
   final String text;
   final String hintText;
   final TextInputType keyboardType;
   final bool obscureText;
   final TextEditingController controller;
+  final int? minLines;
+  final int?maxLines;
 
 
   @override
@@ -29,6 +31,8 @@ class AuthTextField extends StatelessWidget {
         ),
         SizedBox(height: 8.h,),
         TextFormField(
+          minLines:minLines,
+          maxLines: maxLines??1,
           controller: controller,
           obscureText: obscureText,
           keyboardType: keyboardType,

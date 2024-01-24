@@ -21,6 +21,42 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const AuthSplashView(),
       );
     },
+    CompanyApplicationProcessesRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const CompanyApplicationProcessesView(),
+      );
+    },
+    CompanyApplicationSkipRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const CompanyApplicationSkipView(),
+      );
+    },
+    CompanyMakeApplication2Route.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const CompanyMakeApplication2View(),
+      );
+    },
+    CompanyMakeApplicationRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const CompanyMakeApplicationView(),
+      );
+    },
+    CompanySuccessRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const CompanySuccessView(),
+      );
+    },
+    CompanyTypeSelectRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const CompanyTypeSelectView(),
+      );
+    },
     CreatePasswordRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -82,6 +118,90 @@ class AuthSplashRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'AuthSplashRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [CompanyApplicationProcessesView]
+class CompanyApplicationProcessesRoute extends PageRouteInfo<void> {
+  const CompanyApplicationProcessesRoute({List<PageRouteInfo>? children})
+      : super(
+          CompanyApplicationProcessesRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'CompanyApplicationProcessesRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [CompanyApplicationSkipView]
+class CompanyApplicationSkipRoute extends PageRouteInfo<void> {
+  const CompanyApplicationSkipRoute({List<PageRouteInfo>? children})
+      : super(
+          CompanyApplicationSkipRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'CompanyApplicationSkipRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [CompanyMakeApplication2View]
+class CompanyMakeApplication2Route extends PageRouteInfo<void> {
+  const CompanyMakeApplication2Route({List<PageRouteInfo>? children})
+      : super(
+          CompanyMakeApplication2Route.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'CompanyMakeApplication2Route';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [CompanyMakeApplicationView]
+class CompanyMakeApplicationRoute extends PageRouteInfo<void> {
+  const CompanyMakeApplicationRoute({List<PageRouteInfo>? children})
+      : super(
+          CompanyMakeApplicationRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'CompanyMakeApplicationRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [CompanySuccessView]
+class CompanySuccessRoute extends PageRouteInfo<void> {
+  const CompanySuccessRoute({List<PageRouteInfo>? children})
+      : super(
+          CompanySuccessRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'CompanySuccessRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [CompanyTypeSelectView]
+class CompanyTypeSelectRoute extends PageRouteInfo<void> {
+  const CompanyTypeSelectRoute({List<PageRouteInfo>? children})
+      : super(
+          CompanyTypeSelectRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'CompanyTypeSelectRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
