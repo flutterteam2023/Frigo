@@ -21,6 +21,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const AuthSplashView(),
       );
     },
+    BusinessProfileRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const BusinessProfileView(),
+      );
+    },
     CompanyApplicationProcessesRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -81,6 +87,30 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const LoginView(),
       );
     },
+    ManageSubscriptionsRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ManageSubscriptionsView(),
+      );
+    },
+    PasswordUpdateSuccesRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const PasswordUpdateSuccesView(),
+      );
+    },
+    PasswordUpdateRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const PasswordUpdateView(),
+      );
+    },
+    PersonelProfileRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const PersonelProfileView(),
+      );
+    },
     RegisterRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -93,6 +123,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const SecturityVerifyView(),
       );
     },
+    SecurityRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const SecurityView(),
+      );
+    },
     SplashRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -103,6 +139,12 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const SuccessView(),
+      );
+    },
+    UpgradeSubscriptionRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const UpgradeSubscriptionView(),
       );
     },
   };
@@ -118,6 +160,20 @@ class AuthSplashRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'AuthSplashRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [BusinessProfileView]
+class BusinessProfileRoute extends PageRouteInfo<void> {
+  const BusinessProfileRoute({List<PageRouteInfo>? children})
+      : super(
+          BusinessProfileRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'BusinessProfileRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -263,6 +319,62 @@ class LoginRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ManageSubscriptionsView]
+class ManageSubscriptionsRoute extends PageRouteInfo<void> {
+  const ManageSubscriptionsRoute({List<PageRouteInfo>? children})
+      : super(
+          ManageSubscriptionsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ManageSubscriptionsRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [PasswordUpdateSuccesView]
+class PasswordUpdateSuccesRoute extends PageRouteInfo<void> {
+  const PasswordUpdateSuccesRoute({List<PageRouteInfo>? children})
+      : super(
+          PasswordUpdateSuccesRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'PasswordUpdateSuccesRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [PasswordUpdateView]
+class PasswordUpdateRoute extends PageRouteInfo<void> {
+  const PasswordUpdateRoute({List<PageRouteInfo>? children})
+      : super(
+          PasswordUpdateRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'PasswordUpdateRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [PersonelProfileView]
+class PersonelProfileRoute extends PageRouteInfo<void> {
+  const PersonelProfileRoute({List<PageRouteInfo>? children})
+      : super(
+          PersonelProfileRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'PersonelProfileRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [RegisterView]
 class RegisterRoute extends PageRouteInfo<void> {
   const RegisterRoute({List<PageRouteInfo>? children})
@@ -291,6 +403,20 @@ class SecturityVerifyRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [SecurityView]
+class SecurityRoute extends PageRouteInfo<void> {
+  const SecurityRoute({List<PageRouteInfo>? children})
+      : super(
+          SecurityRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SecurityRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [SplashView]
 class SplashRoute extends PageRouteInfo<void> {
   const SplashRoute({List<PageRouteInfo>? children})
@@ -314,6 +440,20 @@ class SuccessRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'SuccessRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [UpgradeSubscriptionView]
+class UpgradeSubscriptionRoute extends PageRouteInfo<void> {
+  const UpgradeSubscriptionRoute({List<PageRouteInfo>? children})
+      : super(
+          UpgradeSubscriptionRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'UpgradeSubscriptionRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

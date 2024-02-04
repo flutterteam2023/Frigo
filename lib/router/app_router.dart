@@ -12,6 +12,13 @@ import 'package:frigo/features/Company/presentation/pages/company_make_applicati
 import 'package:frigo/features/Company/presentation/pages/company_make_application_view.dart';
 import 'package:frigo/features/Company/presentation/pages/company_success_view.dart';
 import 'package:frigo/features/Company/presentation/pages/company_type_select_view.dart';
+import 'package:frigo/features/PasswordUpdate/presentation/pages/password_update_succes_view.dart';
+import 'package:frigo/features/PasswordUpdate/presentation/pages/password_update_view.dart';
+import 'package:frigo/features/Profile/Business/presentation/pages/business_profile_view.dart';
+import 'package:frigo/features/Profile/Business/presentation/pages/manage_subscriptions_view.dart';
+import 'package:frigo/features/Profile/Business/presentation/pages/upgrade_subscription_view.dart';
+import 'package:frigo/features/Profile/Personel/presentation/pages/personel_profile_view.dart';
+import 'package:frigo/features/Profile/Personel/presentation/pages/security_view.dart';
 import 'package:frigo/features/Splash/presentation/pages/easy_splash_view.dart';
 import 'package:frigo/features/splash/presentation/pages/splash_view.dart';
 
@@ -38,7 +45,15 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: CompanyTypeSelectRoute.page, initial: false),
     AutoRoute(page: CompanyMakeApplicationRoute.page, initial: false),
     AutoRoute(page: CompanyMakeApplication2Route.page, initial: false),
-    AutoRoute(page: CompanySuccessRoute.page, initial: true),
+    AutoRoute(page: CompanySuccessRoute.page, initial: false),
+    AutoRoute(page: PersonelProfileRoute.page, initial: false),
+    AutoRoute(page: BusinessProfileRoute.page, initial: false),
+    AutoRoute(page: ManageSubscriptionsRoute.page, initial: false),
+    AutoRoute(page: PasswordUpdateRoute.page, initial: false),
+    AutoRoute(page: PasswordUpdateSuccesRoute.page, initial: false),
+    AutoRoute(page: UpgradeSubscriptionRoute.page, initial: false),
+    AutoRoute(page: SecurityRoute.page, initial: true),
+    
 
 
        
