@@ -81,6 +81,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const ForgotPasswordView(),
       );
     },
+    HomeRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const HomeView(),
+      );
+    },
     LoginRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -111,6 +117,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const PersonelProfileView(),
       );
     },
+    ProfileSettingsRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ProfileSettingsView(),
+      );
+    },
     RegisterRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -139,6 +151,12 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const SuccessView(),
+      );
+    },
+    TownSelectRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const TownSelectView(),
       );
     },
     UpgradeSubscriptionRoute.name: (routeData) {
@@ -305,6 +323,20 @@ class ForgotPasswordRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [HomeView]
+class HomeRoute extends PageRouteInfo<void> {
+  const HomeRoute({List<PageRouteInfo>? children})
+      : super(
+          HomeRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'HomeRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [LoginView]
 class LoginRoute extends PageRouteInfo<void> {
   const LoginRoute({List<PageRouteInfo>? children})
@@ -375,6 +407,20 @@ class PersonelProfileRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ProfileSettingsView]
+class ProfileSettingsRoute extends PageRouteInfo<void> {
+  const ProfileSettingsRoute({List<PageRouteInfo>? children})
+      : super(
+          ProfileSettingsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ProfileSettingsRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [RegisterView]
 class RegisterRoute extends PageRouteInfo<void> {
   const RegisterRoute({List<PageRouteInfo>? children})
@@ -440,6 +486,20 @@ class SuccessRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'SuccessRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [TownSelectView]
+class TownSelectRoute extends PageRouteInfo<void> {
+  const TownSelectRoute({List<PageRouteInfo>? children})
+      : super(
+          TownSelectRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'TownSelectRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

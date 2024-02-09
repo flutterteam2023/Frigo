@@ -12,14 +12,17 @@ import 'package:frigo/features/Company/presentation/pages/company_make_applicati
 import 'package:frigo/features/Company/presentation/pages/company_make_application_view.dart';
 import 'package:frigo/features/Company/presentation/pages/company_success_view.dart';
 import 'package:frigo/features/Company/presentation/pages/company_type_select_view.dart';
+import 'package:frigo/features/Home/presentation/pages/home_view.dart';
 import 'package:frigo/features/PasswordUpdate/presentation/pages/password_update_succes_view.dart';
 import 'package:frigo/features/PasswordUpdate/presentation/pages/password_update_view.dart';
 import 'package:frigo/features/Profile/Business/presentation/pages/business_profile_view.dart';
 import 'package:frigo/features/Profile/Business/presentation/pages/manage_subscriptions_view.dart';
+import 'package:frigo/features/Profile/Business/presentation/pages/profile_settings_view.dart';
 import 'package:frigo/features/Profile/Business/presentation/pages/upgrade_subscription_view.dart';
 import 'package:frigo/features/Profile/Personel/presentation/pages/personel_profile_view.dart';
 import 'package:frigo/features/Profile/Personel/presentation/pages/security_view.dart';
 import 'package:frigo/features/Splash/presentation/pages/easy_splash_view.dart';
+import 'package:frigo/features/Town/presentation/pages/town_select_view.dart';
 import 'package:frigo/features/splash/presentation/pages/splash_view.dart';
 
 
@@ -52,7 +55,10 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: PasswordUpdateRoute.page, initial: false),
     AutoRoute(page: PasswordUpdateSuccesRoute.page, initial: false),
     AutoRoute(page: UpgradeSubscriptionRoute.page, initial: false),
-    AutoRoute(page: SecurityRoute.page, initial: true),
+    AutoRoute(page: SecurityRoute.page, initial: false),
+    AutoRoute(page: ProfileSettingsRoute.page, initial: false),
+    AutoRoute(page: TownSelectRoute.page, initial: false),
+    AutoRoute(page: HomeRoute.page, initial: true),
     
 
 
