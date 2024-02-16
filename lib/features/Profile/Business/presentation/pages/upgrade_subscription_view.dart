@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frigo/commonWidgets/custom_filled_button.dart';
 import 'package:frigo/constant/app_color.dart';
+import 'package:frigo/router/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 @RoutePage()
 class UpgradeSubscriptionView extends StatefulHookConsumerWidget {
@@ -147,7 +148,9 @@ class _UpgradeSubscriptionViewState extends ConsumerState<UpgradeSubscriptionVie
               SizedBox(
                 height: 48.h,
               ),
-              CustomFilledButton(text: 'Devam Et ve Yükselt', onTap: (){})
+              CustomFilledButton(text: 'Devam Et ve Yükselt', onTap: (){
+                context.pushRoute(const BusinessProfileRoute());
+              })
             
           ],
         ),

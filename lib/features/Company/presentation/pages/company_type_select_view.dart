@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frigo/constant/app_color.dart';
+import 'package:frigo/router/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 @RoutePage()
 class CompanyTypeSelectView extends ConsumerWidget {
@@ -36,7 +37,7 @@ class CompanyTypeSelectView extends ConsumerWidget {
               padding:  EdgeInsets.only(bottom: 16.h),
               child: Bounceable(
                 onTap: (){
-                  context.router.pushNamed('/companyApplicationProcessesView');
+                  context.pushRoute(const CompanyMakeApplicationRoute());
                 },
                 child: Container(
                   height: 56.h,

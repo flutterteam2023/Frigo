@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:frigo/commonWidgets/auth_text_field.dart';
 import 'package:frigo/commonWidgets/custom_filled_button.dart';
 import 'package:frigo/constant/app_color.dart';
+import 'package:frigo/router/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 // import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
@@ -33,6 +34,8 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
     return Scaffold(
       backgroundColor: const Color(AppColors.scaffolColor),
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         centerTitle: false,
         title: Text(
           'İşletme Başvuru Yap',
@@ -311,7 +314,7 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
                                     style: TextStyle(
                                         fontSize: 12.sp,
                                         fontWeight: FontWeight.w400,
-                                        color: Color(AppColors.primaryColor)),
+                                        color: const Color(AppColors.primaryColor)),
                                   )
                                 ],
                               ),
@@ -345,7 +348,7 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w400,
                             fontFamily: 'OpenSans',
-                            color: Color(0xff123740)),
+                            color: const Color(0xff123740)),
                       ),
                       SizedBox(
                         width: 4.w,
@@ -356,7 +359,7 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
                             fontSize: 20.sp,
                             fontWeight: FontWeight.w400,
                             fontFamily: 'OpenSans',
-                            color: Color(0xff123740)),
+                            color: const Color(0xff123740)),
                       )
                     ],
                   ),
@@ -387,7 +390,7 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w400,
                             fontFamily: 'OpenSans',
-                            color: Color(0xff123740)),
+                            color: const Color(0xff123740)),
                       ),
                       SizedBox(
                         width: 4.w,
@@ -398,7 +401,7 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
                             fontSize: 20.sp,
                             fontWeight: FontWeight.w400,
                             fontFamily: 'OpenSans',
-                            color: Color(0xff123740)),
+                            color: const Color(0xff123740)),
                       )
                     ],
                   ),
@@ -418,13 +421,16 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
               SizedBox(
                 height: 64.h,
               ),
-              CustomFilledButton(text: 'Onayla ve Devam et', onTap: () {}),
+              CustomFilledButton(text: 'Onayla ve Devam et', onTap: () {
+                context.pushRoute(const CompanyTypeSelectRoute());
+              }),
               SizedBox(
                 height: 24.h,
               ),
               Center(
                 child: Bounceable(
                   onTap: () {
+                    context.replaceRoute(const AuthSplashRoute());
                   },
                   child: Text('Vazgeç',
                   style: TextStyle(

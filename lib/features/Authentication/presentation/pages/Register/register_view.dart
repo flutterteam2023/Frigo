@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frigo/commonWidgets/auth_text_field.dart';
 import 'package:frigo/commonWidgets/custom_filled_button.dart';
 import 'package:frigo/constant/app_color.dart';
+import 'package:frigo/router/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 @RoutePage()
 class RegisterView extends HookConsumerWidget {
@@ -102,7 +103,9 @@ class RegisterView extends HookConsumerWidget {
                 
                 ),
                 SizedBox(height: 48.h,),
-                CustomFilledButton(text: 'Kayıt Ol', onTap: (){}),
+                CustomFilledButton(text: 'Kayıt Ol', onTap: (){
+                  context.replaceRoute(const AuthSplashRoute());
+                }),
                 
                 
               ],
@@ -122,6 +125,7 @@ class RegisterView extends HookConsumerWidget {
                         children: [
                           TextSpan(
                             recognizer: TapGestureRecognizer()..onTap = (){
+                              context.replaceRoute(LoginRoute());
                               print('Kayıt ol tıklandı');
                             },
                             text: 'Giriş Yap',

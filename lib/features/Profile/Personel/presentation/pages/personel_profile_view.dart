@@ -4,6 +4,7 @@ import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frigo/commonWidgets/profile_info_button.dart';
 import 'package:frigo/constant/app_color.dart';
+import 'package:frigo/router/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 @RoutePage()
@@ -82,7 +83,9 @@ class PersonelProfileView extends HookConsumerWidget {
                         ),
                         ProfileInfoButton(
                           title: 'Güvenlik',
-                          onTap: () {},
+                          onTap: () {
+                            context.pushRoute(const SecurityRoute());
+                          },
                         ),
                         SizedBox(
                           height: 32.h,
@@ -114,7 +117,10 @@ class PersonelProfileView extends HookConsumerWidget {
               ),
               Center(
                 child: Bounceable(
-                  onTap: (){},
+                  onTap: (){
+                    context.pushRoute(const CompanyApplicationProcessesRoute());
+
+                  },
                   child: Text('İşletme başvurusu yapmak istiyorum.',
                   style: TextStyle(
                     fontSize: 14.sp,

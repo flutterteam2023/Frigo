@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frigo/commonWidgets/auth_text_field.dart';
 import 'package:frigo/commonWidgets/custom_filled_button.dart';
 import 'package:frigo/constant/app_color.dart';
+import 'package:frigo/router/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 @RoutePage()
 class CompanyMakeApplication2View extends StatefulHookConsumerWidget {
@@ -57,11 +58,15 @@ class _CompanyMakeApplication2ViewState extends ConsumerState<CompanyMakeApplica
               SizedBox(height: 24.h,),
               AuthTextField(text: 'Kartın Son Kullanılma Tarihi', hintText: '07/27', keyboardType: TextInputType.multiline, obscureText: false, controller: dateController),
               SizedBox(height: 48.h,),
-              CustomFilledButton(text: 'Ödeme Yap', onTap: (){}),
+              CustomFilledButton(text: 'Ödeme Yap', onTap: (){
+                context.pushRoute(const CompanySuccessRoute());
+
+              }),
               SizedBox(height: 24.h,),
               Center(
                 child: Bounceable(
                   onTap: (){
+                    context.back();
                   },
                   child: Text('Vazgeç',
                   style: TextStyle(

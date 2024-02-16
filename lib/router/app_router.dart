@@ -42,7 +42,7 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: SecturityVerifyRoute.page, initial: false),
     AutoRoute(page: CreatePasswordRoute.page, initial: false),
     AutoRoute(page: SuccessRoute.page, initial: false),
-    AutoRoute(page: EasySplashRoute.page, initial: false),
+    AutoRoute(page: EasySplashRoute.page, initial: true),
     AutoRoute(page: CompanyApplicationProcessesRoute.page, initial: false),
     AutoRoute(page: CompanyApplicationSkipRoute.page, initial: false),
     AutoRoute(page: CompanyTypeSelectRoute.page, initial: false),
@@ -58,7 +58,7 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: SecurityRoute.page, initial: false),
     AutoRoute(page: ProfileSettingsRoute.page, initial: false),
     AutoRoute(page: TownSelectRoute.page, initial: false),
-    AutoRoute(page: HomeRoute.page, initial: true),
+    AutoRoute(page: HomeRoute.page, initial: false),
     
 
 

@@ -85,6 +85,7 @@ class LoginView extends HookConsumerWidget {
                 ),
                 SizedBox(height: 48.h,),
                 CustomFilledButton(text: 'Giriş Yap', onTap: (){
+                  context.replaceRoute(const HomeRoute());
 
                 }),
                 

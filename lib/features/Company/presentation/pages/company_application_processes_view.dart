@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frigo/commonWidgets/auth_text_field.dart';
 import 'package:frigo/commonWidgets/custom_filled_button.dart';
 import 'package:frigo/constant/app_color.dart';
+import 'package:frigo/router/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 @RoutePage()
 class CompanyApplicationProcessesView extends HookConsumerWidget {
@@ -85,11 +86,14 @@ class CompanyApplicationProcessesView extends HookConsumerWidget {
                 
                 ),
                 SizedBox(height: 48.h,),
-                CustomFilledButton(text: 'Onayla ve Devam et', onTap: (){}),
+                CustomFilledButton(text: 'Onayla ve Devam et', onTap: (){
+                  context.pushRoute(const CompanyApplicationSkipRoute());
+                }),
                 SizedBox(height: 24.h,),
                 Center(
                   child: Bounceable(
                     onTap: () {
+                      context.replaceRoute(const AuthSplashRoute());
                       
                     },
                     child: Text('Vazgeç',

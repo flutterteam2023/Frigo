@@ -179,7 +179,9 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
               SizedBox(
                 height: 48.h,
               ),
-              CustomFilledButton(text: 'Bilgileri Güncelle', onTap: () {}),
+              CustomFilledButton(text: 'Bilgileri Güncelle', onTap: () {
+                context.router.pop();
+              }),
               SizedBox(
                 height: 71.h,)
             ],

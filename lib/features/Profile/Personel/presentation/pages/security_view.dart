@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frigo/commonWidgets/profile_info_button.dart';
 import 'package:frigo/constant/app_color.dart';
+import 'package:frigo/router/app_router.dart';
 @RoutePage()
 class SecurityView extends StatelessWidget {
   const SecurityView({super.key});
@@ -22,7 +23,9 @@ class SecurityView extends StatelessWidget {
       ),
       body:Padding(
         padding:  EdgeInsets.only(top: 24..sp, left: 16.w, right: 16.w),
-        child: ProfileInfoButton(title: 'Şifre Yenileme',onTap: (){},),
+        child: ProfileInfoButton(title: 'Şifre Yenileme',onTap: (){
+          context.pushRoute(const PasswordUpdateRoute());
+        },),
       ) ,
     );
   }

@@ -4,6 +4,7 @@ import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frigo/commonWidgets/custom_filled_button.dart';
 import 'package:frigo/constant/app_color.dart';
+import 'package:frigo/router/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 @RoutePage()
 class CompanyMakeApplicationView extends ConsumerWidget {
@@ -76,11 +77,14 @@ class CompanyMakeApplicationView extends ConsumerWidget {
             
             ),
             SizedBox(height: 48.h,),
-            CustomFilledButton(text: 'Onayla ve Devam Et', onTap: (){}) ,
+            CustomFilledButton(text: 'Onayla ve Devam Et', onTap: (){
+              context.pushRoute(const CompanyMakeApplication2Route());
+            }) ,
             SizedBox(height: 24.h,),
             Center(
               child: Bounceable(
                 onTap: (){
+                  context.back();
                 },
                 child: Text('Vazgeç',
                 style: TextStyle(

@@ -4,6 +4,7 @@ import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frigo/commonWidgets/profile_info_button.dart';
 import 'package:frigo/constant/app_color.dart';
+import 'package:frigo/router/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 @RoutePage()
 class BusinessProfileView extends HookConsumerWidget {
@@ -13,6 +14,12 @@ class BusinessProfileView extends HookConsumerWidget {
    return Scaffold(
       backgroundColor: const Color(AppColors.scaffolColor),
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            context.pushRoute(const HomeRoute());
+          },
+          icon: const Icon(Icons.arrow_back_ios, color: Color(AppColors.textColor)),
+        ),
         elevation: 0,
         backgroundColor: Colors.transparent,
         centerTitle: false,
@@ -81,21 +88,27 @@ class BusinessProfileView extends HookConsumerWidget {
                         ),
                         ProfileInfoButton(
                           title: 'Profil Ayarları',
-                          onTap: () {},
+                          onTap: () {
+                            context.pushRoute(const ProfileSettingsRoute());
+                          },
                         ),
                         SizedBox(
                           height: 16.h,
                         ),
                         ProfileInfoButton(
                           title: 'Güvenlik',
-                          onTap: () {},
+                          onTap: () {
+                            context.pushRoute(const SecurityRoute());
+                          },
                         ),
                          SizedBox(
                           height: 16.h,
                         ),
                         ProfileInfoButton(
                           title: 'Abonelikleri Yönet',
-                          onTap: () {},
+                          onTap: () {
+                            context.pushRoute(const ManageSubscriptionsRoute());
+                          },
                         ),
                         SizedBox(
                           height: 32.h,

@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frigo/commonWidgets/custom_filled_button.dart';
 import 'package:frigo/constant/app_color.dart';
+import 'package:frigo/router/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 @RoutePage()
 class ManageSubscriptionsView extends ConsumerWidget {
@@ -116,7 +117,9 @@ class ManageSubscriptionsView extends ConsumerWidget {
                       ],
                     ),
                     SizedBox(height: 42.h,),
-                    CustomFilledButton(text: 'Aboneliği Yükselt', onTap: (){}),
+                    CustomFilledButton(text: 'Aboneliği Yükselt', onTap: (){
+                      context.pushRoute(const UpgradeSubscriptionRoute());
+                    }),
                     SizedBox(height: 24.h,),
                     Bounceable(
                       onTap: ()async{

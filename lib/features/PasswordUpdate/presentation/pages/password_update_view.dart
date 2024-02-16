@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frigo/commonWidgets/auth_text_field.dart';
 import 'package:frigo/commonWidgets/custom_filled_button.dart';
 import 'package:frigo/constant/app_color.dart';
+import 'package:frigo/router/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 @RoutePage()
 class PasswordUpdateView extends HookConsumerWidget {
@@ -35,7 +36,9 @@ class PasswordUpdateView extends HookConsumerWidget {
             SizedBox(height: 24.h),
             AuthTextField(text: 'Yeni Şifre Onayı', hintText: '****************', keyboardType: TextInputType.multiline, obscureText: true, controller: newPasswordConfirmController),
             SizedBox(height: 48.h),
-            CustomFilledButton(text: 'Şifreyi Güncelle', onTap: (){})
+            CustomFilledButton(text: 'Şifreyi Güncelle', onTap: (){
+              context.pushRoute(const PasswordUpdateSuccesRoute());
+            })
 
           ],
         ),

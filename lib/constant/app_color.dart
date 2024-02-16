@@ -1,5 +1,5 @@
 class AppColors {
-  static const int primaryColor = 0xFFF1802D;
+  static const int primaryColor = 0xFFFC650E;
 
   static const int scaffolColor = 0xffF6F6F6;
 

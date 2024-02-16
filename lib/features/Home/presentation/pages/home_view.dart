@@ -31,250 +31,255 @@ class _HomeViewState extends ConsumerState<HomeView> {
     final selectedfilter = useState(0);
 
     MapController mapController = MapController();
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(AppColors.primaryColor),
-        toolbarHeight: 80.h,
-        centerTitle: false,
-        title: Text(
-          'Logotype',
-          style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w600, color: Colors.white, fontFamily: 'OpenSans'),
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: const Color(AppColors.primaryColor),
+          toolbarHeight: 80.h,
+          centerTitle: false,
+          title: SvgPicture.asset('assets/svg/logo2.svg'),
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(right: 16.w),
+              child: Bounceable(
+                  onTap: () {
+                    context.pushRoute(const BusinessProfileRoute());
+                  }, child: SvgPicture.asset('assets/svg/settings-outline.svg', height: 24.r, width: 24.r)),
+            )
+          ],
         ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16.w),
-            child: Bounceable(
-                onTap: () {}, child: SvgPicture.asset('assets/svg/settings-outline.svg', height: 24.r, width: 24.r)),
-          )
-        ],
-      ),
-      body: Stack(
-        children: [
-          FlutterMap(
-            mapController: mapController,
-            options: const MapOptions(
-              initialCenter: LatLng(39.0891307, 30.4100159),
-              initialZoom: 16,
-            ),
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.example.app',
+        body: Stack(
+          children: [
+            FlutterMap(
+              mapController: mapController,
+              options: const MapOptions(
+                initialCenter: LatLng(39.0891307, 30.4100159),
+                initialZoom: 16,
               ),
-              MarkerLayer(
-                markers: [
-                  Marker(
-                    width: 100.0,
-                    height: 150.0,
-                    point: const LatLng(39.0891307, 30.4100159),
-                    child: Bounceable(
-                        onTap: () {
-                          //bottomsheet açar map üzerindeki işletmeleri gösterir
-                          CustomBottomSheet().infoBottomSheet(context);
-                        },
-                        child: Column(
-                          children: [
-                            Image.asset('assets/images/demo.jpeg'),
-                            const Text(
-                              'Oyma Kilise Ayazini',
-                              textAlign: TextAlign.center,
-                            )
-                          ],
-                        )),
-                  ),
-                  Marker(
-                    width: 40.0,
-                    height: 40.0,
-                    point: const LatLng(39.089204, 30.418907),
-                    child: Bounceable(
-                        onTap: () {
-                          //bottomsheet açar map üzerindeki işletmeleri gösterir
-                          CustomBottomSheet().infoBottomSheet(context);
-                        },
-                        child: Container(
-                          height: 40.r,
-                          width: 40.r,
-                          decoration: const BoxDecoration(color: Color(AppColors.errorColor), shape: BoxShape.circle),
-                          child: SvgPicture.asset(
-                            'assets/svg/bed-outline.svg',
-                            fit: BoxFit.scaleDown,
-                          ),
-                        )),
-                  ),
-                  Marker(
-                    width: 40.0,
-                    height: 40.0,
-                    point: const LatLng(39.087173, 30.417596),
-                    child: Bounceable(
-                        onTap: () {
-                          //bottomsheet açar map üzerindeki işletmeleri gösterir
-                          CustomBottomSheet().infoBottomSheet(context);
-                        },
-                        child: Container(
-                          height: 40.r,
-                          width: 40.r,
-                          decoration: const BoxDecoration(color: Color(AppColors.primaryColor), shape: BoxShape.circle),
-                          child: const Icon(
-                            Icons.location_pin,
-                            color: Colors.white,
-                          ),
-                        )),
-                  ),
-                ],
-              ),
-              const RichAttributionWidget(
-                attributions: [
-                  TextSourceAttribution(
-                    'OpenStreetMap contributors',
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Padding(
-            padding: EdgeInsets.all(16.0.r),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: TextField(
-                    cursorColor: const Color(AppColors.primaryColor),
-                    decoration: InputDecoration(
-                      hintText: 'Konum ve işletme ara',
-                      hintStyle:
-                          TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400, color: const Color(0xff666666)),
-                      prefixIcon: const Icon(Icons.search, color: Color(AppColors.primaryColor)),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.r),
-                        borderSide: BorderSide.none,
+                TileLayer(
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  userAgentPackageName: 'com.example.app',
+                ),
+                MarkerLayer(
+                  markers: [
+                    Marker(
+                      width: 100.0,
+                      height: 150.0,
+                      point: const LatLng(39.0891307, 30.4100159),
+                      child: Bounceable(
+                          onTap: () {
+                            //bottomsheet açar map üzerindeki işletmeleri gösterir
+                            CustomBottomSheet().infoBottomSheet(context);
+                          },
+                          child: Column(
+                            children: [
+                              Image.asset('assets/images/demo.jpeg'),
+                              const Text(
+                                'Oyma Kilise Ayazini',
+                                textAlign: TextAlign.center,
+                              )
+                            ],
+                          )),
+                    ),
+                    Marker(
+                      width: 40.0,
+                      height: 40.0,
+                      point: const LatLng(39.089204, 30.418907),
+                      child: Bounceable(
+                          onTap: () {
+                            //bottomsheet açar map üzerindeki işletmeleri gösterir
+                            CustomBottomSheet().infoBottomSheet(context);
+                          },
+                          child: Container(
+                            height: 40.r,
+                            width: 40.r,
+                            decoration: const BoxDecoration(color: Color(AppColors.errorColor), shape: BoxShape.circle),
+                            child: SvgPicture.asset(
+                              'assets/svg/bed-outline.svg',
+                              fit: BoxFit.scaleDown,
+                            ),
+                          )),
+                    ),
+                    Marker(
+                      width: 40.0,
+                      height: 40.0,
+                      point: const LatLng(39.087173, 30.417596),
+                      child: Bounceable(
+                          onTap: () {
+                            //bottomsheet açar map üzerindeki işletmeleri gösterir
+                            CustomBottomSheet().infoBottomSheet(context);
+                          },
+                          child: Container(
+                            height: 40.r,
+                            width: 40.r,
+                            decoration: const BoxDecoration(color: Color(AppColors.primaryColor), shape: BoxShape.circle),
+                            child: const Icon(
+                              Icons.location_pin,
+                              color: Colors.white,
+                            ),
+                          )),
+                    ),
+                  ],
+                ),
+                const RichAttributionWidget(
+                  attributions: [
+                    TextSourceAttribution(
+                      'OpenStreetMap contributors',
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.all(16.0.r),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      cursorColor: const Color(AppColors.primaryColor),
+                      decoration: InputDecoration(
+                        hintText: 'Konum ve işletme ara',
+                        hintStyle:
+                            TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400, color: const Color(0xff666666)),
+                        prefixIcon: const Icon(Icons.search, color: Color(AppColors.primaryColor)),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.r),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16.w),
                       ),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16.w),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: 16.w,
-                ),
-                Bounceable(
-                  onTap: () {
-                    showModalBottomSheet(
-                      enableDrag: true,
-                      showDragHandle: true,
-                      backgroundColor: const Color(AppColors.scaffolColor),
-                      context: context,
-                      builder: (context) {
-                         return Padding(
-                           padding:  EdgeInsets.only( left: 24.w, right: 24.w),
-                           child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Bounceable(
-                                onTap: () {
-                                  context.pushRoute(const TownSelectRoute());
-                                  
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10.r)
-                                                       
-                                  ),
-                                  child: Padding(
-                                    padding:  EdgeInsets.symmetric(horizontal: 12.w,vertical: 14.h),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('İhsaniye',
-                                        style: TextStyle(
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.black,
-                                          fontFamily: 'OpenSans'
-                                        ),
-                                        ),
-                                        SvgPicture.asset('assets/svg/caret-forward-outline.svg')
-                                      ],
+                  SizedBox(
+                    width: 16.w,
+                  ),
+                  Bounceable(
+                    onTap: () {
+                      showModalBottomSheet(
+                        enableDrag: true,
+                        showDragHandle: true,
+                        backgroundColor: const Color(AppColors.scaffolColor),
+                        context: context,
+                        builder: (context) {
+                           return Padding(
+                             padding:  EdgeInsets.only( left: 24.w, right: 24.w),
+                             child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Bounceable(
+                                  onTap: () {
+                                    context.pushRoute(const TownSelectRoute());
+                                    
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10.r)
+                                                         
+                                    ),
+                                    child: Padding(
+                                      padding:  EdgeInsets.symmetric(horizontal: 12.w,vertical: 14.h),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('İhsaniye',
+                                          style: TextStyle(
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.black,
+                                            fontFamily: 'OpenSans'
+                                          ),
+                                          ),
+                                          SvgPicture.asset('assets/svg/caret-forward-outline.svg')
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 48.h,
-                              ),
-                              CustomFilledButton(text: 'Filtrele ve Devam Et', onTap: (){}),
-                              SizedBox(height: 32.h,)
-                            ],
-                         
-                           ),
-                         );
-                      },
-                    );
-                  },
-                  child: Container(
-                    height: 48.r,
-                    width: 48.r,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                    child: SvgPicture.asset(
-                      "assets/svg/filter-outline.svg",
-                      fit: BoxFit.scaleDown,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 40.h),
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: SizedBox(
-                height: 37.h,
-                child: ListView.builder(
-                  itemCount: filterList.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.only(right: index == filterList.length - 1 ? 16.w : 0),
-                      child: Bounceable(
-                        onTap: () {
-                          selectedfilter.value = index;
+                                SizedBox(
+                                  height: 48.h,
+                                ),
+                                CustomFilledButton(text: 'Filtrele ve Devam Et', onTap: (){}),
+                                SizedBox(height: 32.h,)
+                              ],
+                           
+                             ),
+                           );
                         },
-                        child: Container(
-                          margin: EdgeInsets.only(left: 16.w),
-                          decoration: BoxDecoration(
-                              color: selectedfilter.value == index ? const Color(0xff123740) : Colors.white,
-                              borderRadius: BorderRadius.circular(10.r),
-                              border: Border.all(
-                                color: const Color(0xff123740),
-                                width: 1,
-                              )),
-                          child: Center(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10.w),
-                              child: Text(
-                                filterList[index],
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w400,
-                                  color: selectedfilter.value == index ? Colors.white : const Color(0xff123740),
+                      );
+                    },
+                    child: Container(
+                      height: 48.r,
+                      width: 48.r,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      child: SvgPicture.asset(
+                        "assets/svg/filter-outline.svg",
+                        fit: BoxFit.scaleDown,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 40.h),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: SizedBox(
+                  height: 37.h,
+                  child: ListView.builder(
+                    itemCount: filterList.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: EdgeInsets.only(right: index == filterList.length - 1 ? 16.w : 0),
+                        child: Bounceable(
+                          onTap: () {
+                            selectedfilter.value = index;
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(left: 16.w),
+                            decoration: BoxDecoration(
+                                color: selectedfilter.value == index ? const Color(0xff123740) : Colors.white,
+                                borderRadius: BorderRadius.circular(10.r),
+                                border: Border.all(
+                                  color: const Color(0xff123740),
+                                  width: 1,
+                                )),
+                            child: Center(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                child: Text(
+                                  filterList[index],
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: selectedfilter.value == index ? Colors.white : const Color(0xff123740),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
