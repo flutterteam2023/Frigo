@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 import 'package:frigo/features/Authentication/presentation/pages/CreatePassword/create_password_view.dart';
 import 'package:frigo/features/Authentication/presentation/pages/ForgotPassword/forgot_password_view.dart';
 import 'package:frigo/features/Authentication/presentation/pages/Login/login_view.dart';

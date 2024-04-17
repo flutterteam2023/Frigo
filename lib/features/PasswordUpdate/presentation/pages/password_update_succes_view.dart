@@ -46,7 +46,7 @@ class PasswordUpdateSuccesView extends ConsumerWidget {
                 // bütün sayfaları kapatıp login sayfasına yönlendiriyoruz. Ama login sayfası geri gittiğinde splash screen'a yönlendiriyor.
                 // bunu düzeltmek için splash screen'a yönlendirmek yerine login sayfasına yönlendireceğiz.
                 context.router.popUntilRoot();
-                context.pushRoute(const LoginRoute());
+                context.pushRoute(const PersonelProfileRoute ());
       
               })
             ],

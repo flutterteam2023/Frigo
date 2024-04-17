@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "780076179146",
+    "project_id": "frigo-d8a8a",
+    "storage_bucket": "frigo-d8a8a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:780076179146:android:44d2629a7bb0e8d1fb9e33",
+        "android_client_info": {
+          "package_name": "com.example.frigo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6-FC7GR0YC7bKRi2Rw96oEbIpyIIsA7E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

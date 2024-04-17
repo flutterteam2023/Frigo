@@ -4,6 +4,8 @@ import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frigo/commonWidgets/profile_info_button.dart';
 import 'package:frigo/constant/app_color.dart';
+import 'package:frigo/features/Authentication/presentation/providers/auth_notifier.dart';
+import 'package:frigo/features/User/provider/user_notifier.dart';
 import 'package:frigo/router/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -12,9 +14,18 @@ class PersonelProfileView extends HookConsumerWidget {
   const PersonelProfileView({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(authProvider);
+    final profileState = ref.watch(userProvider);
     return Scaffold(
       backgroundColor: const Color(AppColors.scaffolColor),
       appBar: AppBar(
+        leading:  IconButton(
+          onPressed: () {
+            context.replaceRoute(const HomeRoute());
+          },
+          icon: const Icon(Icons.arrow_back_ios),
+          color: const Color(AppColors.primaryColor),
+        ),
         elevation: 0,
         backgroundColor: Colors.transparent,
         centerTitle: false,
@@ -51,7 +62,7 @@ class PersonelProfileView extends HookConsumerWidget {
               ),
               Center(
                 child: Text(
-                  'Ahmet Yılmaz',
+              profileState.userModel!=null?    profileState.userModel!.name ?? '':"",
                   style: TextStyle(
                     fontFamily: 'OpenSans',
                     fontSize: 16.sp,
@@ -118,7 +129,8 @@ class PersonelProfileView extends HookConsumerWidget {
               Center(
                 child: Bounceable(
                   onTap: (){
-                    context.pushRoute(const CompanyApplicationProcessesRoute());
+                  ref.read(userProvider.notifier).businessApplication(context);
+
 
                   },
                   child: Text('İşletme başvurusu yapmak istiyorum.',
@@ -135,9 +147,10 @@ class PersonelProfileView extends HookConsumerWidget {
                 height: 50.h,
               ),
 
-              Center(
+            state.isLoading==false?  Center(
                 child: Bounceable(
                   onTap: () {
+                    ref.read(userProvider.notifier).signOut(context);
                     
                   },
                   child: Text('Çıkış Yap',
@@ -149,7 +162,8 @@ class PersonelProfileView extends HookConsumerWidget {
                   ),
                   ),
                 ),
-              ),
+              ):const Center(
+                child: CircularProgressIndicator(color: Color(AppColors.primaryColor),),),
               SizedBox(height: 20.h,),
               Center(
                 child: Text('Frig-o V1.0',

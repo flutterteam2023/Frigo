@@ -34,9 +34,14 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     CompanyApplicationSkipRoute.name: (routeData) {
+      final args = routeData.argsAs<CompanyApplicationSkipRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const CompanyApplicationSkipView(),
+        child: CompanyApplicationSkipView(
+          args.email,
+          args.password,
+          key: args.key,
+        ),
       );
     },
     CompanyMakeApplication2Route.name: (routeData) {
@@ -212,16 +217,46 @@ class CompanyApplicationProcessesRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [CompanyApplicationSkipView]
-class CompanyApplicationSkipRoute extends PageRouteInfo<void> {
-  const CompanyApplicationSkipRoute({List<PageRouteInfo>? children})
-      : super(
+class CompanyApplicationSkipRoute
+    extends PageRouteInfo<CompanyApplicationSkipRouteArgs> {
+  CompanyApplicationSkipRoute({
+    required String email,
+    required String password,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
           CompanyApplicationSkipRoute.name,
+          args: CompanyApplicationSkipRouteArgs(
+            email: email,
+            password: password,
+            key: key,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'CompanyApplicationSkipRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<CompanyApplicationSkipRouteArgs> page =
+      PageInfo<CompanyApplicationSkipRouteArgs>(name);
+}
+
+class CompanyApplicationSkipRouteArgs {
+  const CompanyApplicationSkipRouteArgs({
+    required this.email,
+    required this.password,
+    this.key,
+  });
+
+  final String email;
+
+  final String password;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'CompanyApplicationSkipRouteArgs{email: $email, password: $password, key: $key}';
+  }
 }
 
 /// generated route for

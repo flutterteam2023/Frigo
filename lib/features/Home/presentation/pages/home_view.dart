@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -7,6 +8,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:frigo/commonWidgets/custom_filled_button.dart';
 import 'package:frigo/constant/app_color.dart';
+import 'package:frigo/features/Home/presentation/providers/home_notifier.dart';
+import 'package:frigo/features/User/provider/user_notifier.dart';
 import 'package:frigo/router/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:latlong2/latlong.dart';
@@ -26,9 +29,46 @@ class _HomeViewState extends ConsumerState<HomeView> {
     'Yeme - İçme',
     'Konaklama',
   ];
+  List<Marker> markers = [];
+  @override
+  void initState() {
+    ref.read(userProvider.notifier).getUser();
+    ref.read(homeProvider.notifier).getPlace().then((value) {
+      final state = ref.read(homeProvider);
+      if (state.placeModels != null) {
+        for (var item in state.placeModels!) {
+          markers.add(
+            Marker(
+              width: 100.0,
+              height: 150.0,
+              point: LatLng(item.latitude!, item.longitude!),
+              child: Bounceable(
+                  onTap: () {
+                    //bottomsheet açar map üzerindeki işletmeleri gösterir
+                    CustomBottomSheet().infoBottomSheet(context,"place",item.name!,item.image!,item.description!,"",item.images!,"");
+                  },
+                  child: Column(
+                    children: [
+                      Image.network(item.image!),
+                      Text(
+                        item.name!,
+                        textAlign: TextAlign.center,
+                      )
+                    ],
+                  )),
+            ),
+          );
+        }
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final selectedfilter = useState(0);
+    final state = ref.watch(userProvider);
+    final homestate = ref.watch(homeProvider);
 
     MapController mapController = MapController();
     return WillPopScope(
@@ -47,8 +87,13 @@ class _HomeViewState extends ConsumerState<HomeView> {
               padding: EdgeInsets.only(right: 16.w),
               child: Bounceable(
                   onTap: () {
-                    context.pushRoute(const BusinessProfileRoute());
-                  }, child: SvgPicture.asset('assets/svg/settings-outline.svg', height: 24.r, width: 24.r)),
+                    if (state.userModel != null) {
+                      context.pushRoute(const PersonelProfileRoute());
+                    } else {
+                      context.pushRoute(const BusinessProfileRoute());
+                    }
+                  },
+                  child: SvgPicture.asset('assets/svg/settings-outline.svg', height: 24.r, width: 24.r)),
             )
           ],
         ),
@@ -66,65 +111,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                   userAgentPackageName: 'com.example.app',
                 ),
                 MarkerLayer(
-                  markers: [
-                    Marker(
-                      width: 100.0,
-                      height: 150.0,
-                      point: const LatLng(39.0891307, 30.4100159),
-                      child: Bounceable(
-                          onTap: () {
-                            //bottomsheet açar map üzerindeki işletmeleri gösterir
-                            CustomBottomSheet().infoBottomSheet(context);
-                          },
-                          child: Column(
-                            children: [
-                              Image.asset('assets/images/demo.jpeg'),
-                              const Text(
-                                'Oyma Kilise Ayazini',
-                                textAlign: TextAlign.center,
-                              )
-                            ],
-                          )),
-                    ),
-                    Marker(
-                      width: 40.0,
-                      height: 40.0,
-                      point: const LatLng(39.089204, 30.418907),
-                      child: Bounceable(
-                          onTap: () {
-                            //bottomsheet açar map üzerindeki işletmeleri gösterir
-                            CustomBottomSheet().infoBottomSheet(context);
-                          },
-                          child: Container(
-                            height: 40.r,
-                            width: 40.r,
-                            decoration: const BoxDecoration(color: Color(AppColors.errorColor), shape: BoxShape.circle),
-                            child: SvgPicture.asset(
-                              'assets/svg/bed-outline.svg',
-                              fit: BoxFit.scaleDown,
-                            ),
-                          )),
-                    ),
-                    Marker(
-                      width: 40.0,
-                      height: 40.0,
-                      point: const LatLng(39.087173, 30.417596),
-                      child: Bounceable(
-                          onTap: () {
-                            //bottomsheet açar map üzerindeki işletmeleri gösterir
-                            CustomBottomSheet().infoBottomSheet(context);
-                          },
-                          child: Container(
-                            height: 40.r,
-                            width: 40.r,
-                            decoration: const BoxDecoration(color: Color(AppColors.primaryColor), shape: BoxShape.circle),
-                            child: const Icon(
-                              Icons.location_pin,
-                              color: Colors.white,
-                            ),
-                          )),
-                    ),
-                  ],
+                  markers: markers,
                 ),
                 const RichAttributionWidget(
                   attributions: [
@@ -169,34 +156,30 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         backgroundColor: const Color(AppColors.scaffolColor),
                         context: context,
                         builder: (context) {
-                           return Padding(
-                             padding:  EdgeInsets.only( left: 24.w, right: 24.w),
-                             child: Column(
+                          return Padding(
+                            padding: EdgeInsets.only(left: 24.w, right: 24.w),
+                            child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Bounceable(
                                   onTap: () {
                                     context.pushRoute(const TownSelectRoute());
-                                    
                                   },
                                   child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10.r)
-                                                         
-                                    ),
+                                    decoration:
+                                        BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10.r)),
                                     child: Padding(
-                                      padding:  EdgeInsets.symmetric(horizontal: 12.w,vertical: 14.h),
+                                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 14.h),
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('İhsaniye',
-                                          style: TextStyle(
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black,
-                                            fontFamily: 'OpenSans'
-                                          ),
+                                          Text(
+                                            'İhsaniye',
+                                            style: TextStyle(
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.w400,
+                                                color: Colors.black,
+                                                fontFamily: 'OpenSans'),
                                           ),
                                           SvgPicture.asset('assets/svg/caret-forward-outline.svg')
                                         ],
@@ -207,12 +190,13 @@ class _HomeViewState extends ConsumerState<HomeView> {
                                 SizedBox(
                                   height: 48.h,
                                 ),
-                                CustomFilledButton(text: 'Filtrele ve Devam Et', onTap: (){}),
-                                SizedBox(height: 32.h,)
+                                CustomFilledButton(text: 'Filtrele ve Devam Et', onTap: () {}),
+                                SizedBox(
+                                  height: 32.h,
+                                )
                               ],
-                           
-                             ),
-                           );
+                            ),
+                          );
                         },
                       );
                     },
@@ -286,154 +270,177 @@ class _HomeViewState extends ConsumerState<HomeView> {
 }
 
 class CustomBottomSheet {
-  void infoBottomSheet(BuildContext context) {
+  void infoBottomSheet(BuildContext context,
+  
+  String type,
+  String name,
+  String image,
+  String description,
+  String phone,
+  List<String> images,
+  String subtitle,
+  ) {
     showModalBottomSheet(
         enableDrag: true,
         showDragHandle: true,
         backgroundColor: Colors.white,
         context: context,
         builder: (context) {
-          return SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.only(top: 45.h, left: 24.w, right: 24.w),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(5.r)),
-                          child: Image.asset(
-                            'assets/images/demo.jpeg',
-                            width: 103.r,
-                            height: 103.r,
-                            fit: BoxFit.fill,
-                          )),
-                      SizedBox(
-                        width: 14.w,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+          return Stack(
+            children: [
+              SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 45.h, left: 24.w, right: 24.w),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Örnek İşletme',
-                            style: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black,
-                                fontFamily: 'OpenSans'),
+                          ClipRRect(
+                              borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                              child:type!="place"? Image.asset(
+                                'assets/images/demo.jpeg',
+                                width: 103.r,
+                                height: 103.r,
+                                fit: BoxFit.fill,
+                              ):Image.network( image,
+                                width: 103.r,
+                                height: 103.r,
+                                fit: BoxFit.fill,)),
+                          SizedBox(
+                            width: 14.w,
                           ),
-                          SizedBox(height: 8.h),
-                          Text(
-                            'İhsaniye',
-                            style: TextStyle(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w400,
-                                color: const Color(0xff666666),
-                                fontFamily: 'OpenSans'),
-                          ),
-                          SizedBox(height: 16.h),
-                          Container(
-                            decoration: BoxDecoration(
-                                color: const Color(0xffE6F0F2), borderRadius: BorderRadius.circular(20.r)),
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 5.h, bottom: 5.h),
-                              child: Text(
-                                'Yeme - İçme',
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                               name,
                                 style: TextStyle(
-                                    fontSize: 12.sp,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                    fontFamily: 'OpenSans'),
+                              ),
+                              SizedBox(height: 8.h),
+                              Text(
+                               type!="place"? 'İhsaniye':'Ziyaret',
+                                style: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: const Color(0xff666666),
+                                    fontFamily: 'OpenSans'),
+                              ),
+                              SizedBox(height: 16.h),
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: const Color(0xffE6F0F2), borderRadius: BorderRadius.circular(20.r)),
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 5.h, bottom: 5.h),
+                                  child: Text(
+                                   type!="place"?  'Yeme - İçme': 'Gezilecek Yerler',
+                                    style: TextStyle(
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w400,
+                                        color: const Color(0xff123740),
+                                        fontFamily: 'OpenSans'),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 24.h,
+                      ),
+                      SizedBox(
+                        height: 75.h,
+                        child: ListView.builder(
+                          itemCount: images.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.only(left: index == 0 ? 0 : 16.w),
+                              child: SizedBox(
+                                  height: 75.r,
+                                  width: 75.r,
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                                      child:type!="place"? Image.asset(
+                                        'assets/images/demo.jpeg',
+                                        fit: BoxFit.fill,
+                                      ):Image.network(
+                                        images[index],
+                                        fit: BoxFit.fill,
+                                      ))),
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 24.h,
+                      ),
+                      Text(
+                        description,
+                        style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w400,
+                            color: const Color(0xff666666),
+                            fontFamily: 'OpenSans'),
+                      ),
+                      SizedBox(
+                        height: 24.h,
+                      ),
+                    type!="place"?  Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              SvgPicture.asset('assets/svg/call-outline.svg'),
+                              SizedBox(
+                                width: 17.w,
+                              ),
+                              Text(
+                                '(+90) 123 456 78 91',
+                                style: TextStyle(
+                                    fontSize: 14.sp,
                                     fontWeight: FontWeight.w400,
                                     color: const Color(0xff123740),
                                     fontFamily: 'OpenSans'),
-                              ),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 24.h,
-                  ),
-                  SizedBox(
-                    height: 75.h,
-                    child: ListView.builder(
-                      itemCount: 4,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.only(left: index == 0 ? 0 : 16.w),
-                          child: SizedBox(
-                              height: 75.r,
-                              width: 75.r,
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.all(Radius.circular(5.r)),
-                                  child: Image.asset(
-                                    'assets/images/demo.jpeg',
-                                    fit: BoxFit.fill,
-                                  ))),
-                        );
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    height: 24.h,
-                  ),
-                  Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore ',
-                    style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w400,
-                        color: const Color(0xff666666),
-                        fontFamily: 'OpenSans'),
-                  ),
-                  SizedBox(
-                    height: 24.h,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          SvgPicture.asset('assets/svg/call-outline.svg'),
-                          SizedBox(
-                            width: 17.w,
+                              )
+                            ],
                           ),
-                          Text(
-                            '(+90) 123 456 78 91',
-                            style: TextStyle(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w400,
-                                color: const Color(0xff123740),
-                                fontFamily: 'OpenSans'),
-                          )
+                          Bounceable(
+                            onTap: () {},
+                            child: Text(
+                              'Ara',
+                              style: TextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: const Color(0xff30608A),
+                                  fontFamily: 'OpenSans'),
+                            ),
+                          ),
                         ],
+                      ):const SizedBox.shrink(),
+                      SizedBox(
+                        height: 100.h,
                       ),
-                      Bounceable(
-                        onTap: () {},
-                        child: Text(
-                          'Ara',
-                          style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(0xff30608A),
-                              fontFamily: 'OpenSans'),
-                        ),
-                      ),
+                      
+                      
+                      
                     ],
                   ),
-                  SizedBox(
-                    height: 48.h,
-                  ),
-                  CustomFilledButton(text: 'Yol Tarifi Al', onTap: () {}),
-                  SizedBox(
-                    height: 48.h,
-                  ),
-                ],
+                ),
               ),
-            ),
+              Positioned(
+                  bottom: 24.h,
+                  left:  24.w,
+                  right:  24.w,
+                  child: CustomFilledButton(text: 'Yol Tarifi Al', onTap: () {})),
+            ],
           );
         });
   }

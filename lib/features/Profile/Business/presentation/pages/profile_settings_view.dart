@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,7 +8,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:frigo/commonWidgets/auth_text_field.dart';
 import 'package:frigo/commonWidgets/custom_filled_button.dart';
 import 'package:frigo/constant/app_color.dart';
+import 'package:frigo/features/User/provider/user_notifier.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 @RoutePage()
 class ProfileSettingsView extends StatefulHookConsumerWidget {
@@ -22,6 +25,7 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(userProvider);
     final descriptionController = useTextEditingController();
 
     final businessNameController = useTextEditingController();
@@ -48,10 +52,11 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AuthTextField(
+
                   text: 'İşletme İsmi',
-                  hintText: 'Örnek İşletme',
+                  hintText: state.businessModel!.businessName??'İşletme İsmi',
                   keyboardType: TextInputType.multiline,
-                  obscureText: false,
+                  obscureText: null,
                   controller: businessNameController),
               SizedBox(
                 height: 24.h,
@@ -85,7 +90,7 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
                   fillColor: Colors.white,
                 ),
                 dropdownColor: Colors.white,
-                value: dropdownValue,
+                value: state.businessModel!.businessType??'Konaklama',
                 onChanged: (String? newValue) {
                   setState(() {
                     dropdownValue = newValue!;
@@ -112,9 +117,9 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
               AuthTextField(
                 text: 'Açıklama',
                 hintText:
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore ',
+                    state.businessModel!.description??'Açıklama',
                 keyboardType: TextInputType.multiline,
-                obscureText: false,
+                obscureText: null,
                 controller: descriptionController,
                 minLines: 4,
                 maxLines: 100,
@@ -133,28 +138,45 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
               SizedBox(
                 height: 236.h,
                 child: GridView.builder(
-                  itemCount: 6,
+                  itemCount: state.businessModel!.images!.length + 1,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3, mainAxisSpacing: 25.w, crossAxisSpacing: 32.h, childAspectRatio: 0.9),
                   itemBuilder: (context, index) {
                     return index != 0
-                        ? Container(
-                            width: 102.r,
-                            height: 102.r,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5.r),
-                                image: const DecorationImage(
-                                    image: AssetImage('assets/images/demoImage.png'), fit: BoxFit.fill)),
-                          )
+                        ? Stack(
+                          children: [
+                            Container(
+                                width: 102.r,
+                                height: 102.r,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5.r),
+                                    image:  DecorationImage(
+                                        image: NetworkImage(state.businessModel!.images![index-1]  ), fit: BoxFit.fill)),
+                              ),
+                            
+                            Positioned(
+                              top: 6.h,
+                              right: 6.w,
+                              child: Bounceable(
+                                onTap: () {
+                                  
+                                },
+                                child: Icon(Icons.delete, color: const Color(AppColors.primaryColor), size: 25.r,)))
+                          ],
+                        )
                         : Bounceable(
-                            onTap: () {},
+                            onTap: () {
+                              ImagePicker imagePicker = ImagePicker();
+                              imagePicker.pickImage(source: ImageSource.gallery);
+
+                            },
                             child: Container(
                               width: 102.r,
                               height: 102.r,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5.r),
                                   color: Colors.white,
-                                  border: Border.all(color: Color(AppColors.primaryColor))),
+                                  border: Border.all(color: const Color(AppColors.primaryColor))),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

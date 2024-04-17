@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,13 +12,18 @@ import 'package:flutter_svg/svg.dart';
 import 'package:frigo/commonWidgets/auth_text_field.dart';
 import 'package:frigo/commonWidgets/custom_filled_button.dart';
 import 'package:frigo/constant/app_color.dart';
+import 'package:frigo/features/Authentication/presentation/providers/auth_notifier.dart';
 import 'package:frigo/router/app_router.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 // import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 @RoutePage()
 class CompanyApplicationSkipView extends StatefulHookConsumerWidget {
-  const CompanyApplicationSkipView({super.key});
+  const CompanyApplicationSkipView(this.email, this.password, {super.key});
+  final String email;
+  final String password;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _CompanyApplicationSkipViewState();
@@ -21,15 +31,51 @@ class CompanyApplicationSkipView extends StatefulHookConsumerWidget {
 
 class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationSkipView> {
   int? selectedOption = 0;
+  String _latitude = '';
+  String _longitude = '';
+  final List<XFile> images = [];
+  final _auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    getCurrentLocation();
+    super.initState();
+  }
+
+  Future<void> getCurrentLocation() async {
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        print("No permission, requesting one");
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.deniedForever) {
+          return Future.error('Location Not Available');
+        }
+      }
+      print("Found permission to get location");
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
+      _latitude = position.latitude.toString();
+      _longitude = position.longitude.toString();
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     // PhoneNumber number = PhoneNumber(isoCode: 'TR');
+    final isSwitched = useState(true);
 
     final companyNameController = useTextEditingController();
     final descriptionController = useTextEditingController();
+    final phoneController = useTextEditingController();
 
-    String dropdownValue = 'Konaklama';
+    final businessType = useState('Konaklama');
+
+    final formKey = GlobalKey<FormState>();
+    final formkeyDescription = GlobalKey<FormState>();
+    final formkeyCompanyName = GlobalKey<FormState>();
+    final state = ref.watch(authProvider);
 
     return Scaffold(
       backgroundColor: const Color(AppColors.scaffolColor),
@@ -60,12 +106,20 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
               SizedBox(
                 height: 16.sp,
               ),
-              AuthTextField(
-                  text: 'İşletme İsmi',
-                  hintText: 'Örnek İşletme',
-                  keyboardType: TextInputType.multiline,
-                  obscureText: false,
-                  controller: companyNameController),
+              Form(
+                key: formkeyCompanyName,
+                child: AuthTextField(
+                    validator: (p0) {
+                      if (p0!.isEmpty) {
+                        return 'İşletme ismi boş bırakılamaz';
+                      }
+                    },
+                    text: 'İşletme İsmi',
+                    hintText: 'Örnek İşletme',
+                    keyboardType: TextInputType.multiline,
+                    obscureText: null,
+                    controller: companyNameController),
+              ),
               SizedBox(
                 height: 24.h,
               ),
@@ -98,11 +152,9 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
                   fillColor: Colors.white,
                 ),
                 dropdownColor: Colors.white,
-                value: dropdownValue,
+                value: businessType.value,
                 onChanged: (String? newValue) {
-                  setState(() {
-                    dropdownValue = newValue!;
-                  });
+                  businessType.value = newValue!;
                 },
                 items:
                     <String>['Konaklama', 'Cafe', 'Restorant', 'Market'].map<DropdownMenuItem<String>>((String value) {
@@ -122,15 +174,23 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
               SizedBox(
                 height: 24.h,
               ),
-              AuthTextField(
-                text: 'Açıklama',
-                hintText:
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore ',
-                keyboardType: TextInputType.multiline,
-                obscureText: false,
-                controller: descriptionController,
-                minLines: 4,
-                maxLines: 100,
+              Form(
+                key: formkeyDescription,
+                child: AuthTextField(
+                  validator: (p0) {
+                    if (p0!.isEmpty) {
+                      return 'Açıklama boş bırakılamaz';
+                    }
+                  },
+                  text: 'Açıklama',
+                  hintText:
+                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore ',
+                  keyboardType: TextInputType.multiline,
+                  obscureText: null,
+                  controller: descriptionController,
+                  minLines: 4,
+                  maxLines: 100,
+                ),
               ),
               SizedBox(
                 height: 32.h,
@@ -140,20 +200,24 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
                 style: TextStyle(
                     fontSize: 16.sp, fontWeight: FontWeight.w600, fontFamily: 'OpenSans', color: Colors.black),
               ),
+
               SizedBox(
                 height: 16.h,
               ),
-              Text(
-                'Telefon Numarası',
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Rubik',
-                  color: const Color(AppColors.textLightColor),
+              Form(
+                key: formKey,
+                child: AuthTextField(
+                  validator: (p0) {
+                    if (p0!.isEmpty) {
+                      return 'Telefon numarası boş bırakılamaz';
+                    }
+                  },
+                  text: 'Telefon Numarası',
+                  hintText: '534 000 00 00',
+                  keyboardType: TextInputType.number,
+                  obscureText: null,
+                  controller: phoneController,
                 ),
-              ),
-              SizedBox(
-                height: 5.h,
               ),
               // InternationalPhoneNumberInput(
               //   onInputChanged: (PhoneNumber numberValue) {
@@ -220,8 +284,10 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
                     ),
                   ),
                   Switch(
-                    value: true,
-                    onChanged: (value) {},
+                    value: isSwitched.value,
+                    onChanged: (value) {
+                      isSwitched.value = value;
+                    },
                     activeColor: const Color(0xff30608A),
                   ),
                 ],
@@ -238,7 +304,9 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
                 height: 17.h,
               ),
               Bounceable(
-                onTap: () {},
+                onTap: () {
+                  getCurrentLocation();
+                },
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -254,7 +322,9 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
                           width: 16.w,
                         ),
                         Text(
-                          'Konum Paylaş',
+                          _latitude == " " && _longitude == " "
+                              ? 'Konum Paylaş'
+                              : "Latitude: $_latitude \nLongitude: $_longitude",
                           style: TextStyle(
                               fontSize: 14.sp,
                               fontWeight: FontWeight.w600,
@@ -280,21 +350,63 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
               SizedBox(
                 height: 236.h,
                 child: GridView.builder(
-                  itemCount: 6,
+                  itemCount: images.length + 1,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3, mainAxisSpacing: 25.w, crossAxisSpacing: 32.h, childAspectRatio: 0.9),
                   itemBuilder: (context, index) {
                     return index != 0
-                        ? Container(
-                            width: 102.r,
-                            height: 102.r,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5.r),
-                                image: const DecorationImage(
-                                    image: AssetImage('assets/images/demoImage.png'), fit: BoxFit.fill)),
+                        ? Stack(
+                            children: [
+                              Container(
+                                width: 102.r,
+                                height: 102.r,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.r),
+                                ),
+                                child: Image.file(
+                                  File(images[index - 1].path),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Positioned(
+                                right: 0,
+                                top: 0,
+                                child: Bounceable(
+                                  onTap: () {
+                                    setState(() {
+                                      images.removeAt(index - 1);
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 20.r,
+                                    height: 20.r,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(50.r),
+                                    ),
+                                    child: Center(
+                                        child: Icon(
+                                      Icons.close,
+                                      size: 16.r,
+                                      color: const Color(AppColors.primaryColor),
+                                    )),
+                                  ),
+                                ),
+                              )
+                            ],
                           )
                         : Bounceable(
-                            onTap: () {},
+                            onTap: () {
+                              final picker = ImagePicker().pickImage(source: ImageSource.gallery);
+                              picker.then((value) {
+                                if (value != null) {
+                                  setState(() {
+                                    images.add(value);
+                                    print(images.length);
+                                  });
+                                }
+                              });
+                            },
                             child: Container(
                               width: 102.r,
                               height: 102.r,
@@ -421,9 +533,59 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
               SizedBox(
                 height: 64.h,
               ),
-              CustomFilledButton(text: 'Onayla ve Devam et', onTap: () {
-                context.pushRoute(const CompanyTypeSelectRoute());
-              }),
+           state.isLoading==false?   CustomFilledButton(
+                  text: 'Başvur',
+                  onTap: () async {
+                    if (formKey.currentState!.validate() &&
+                        formkeyDescription.currentState!.validate() &&
+                        formkeyCompanyName.currentState!.validate() &&
+                        selectedOption != null) {
+                     
+                      await ref.read(authProvider.notifier).registerBusiness(
+                        widget.email,
+                        widget.password,
+                        images,
+                       companyNameController.value.text,
+                          businessType.value,
+                          descriptionController.value.text,
+                          phoneController.value.text,
+                          isSwitched.value,
+                          _latitude,
+                          _longitude,
+                          selectedOption!,
+                          context
+                      );
+                      print('Başvuruldu');
+                    } else {
+                      print('Başvuru yapılamadı');
+                    }
+                    // return showDialog(
+                    //   context: context,
+                    //   builder: (context) {
+                    //     return AlertDialog(
+                    //       title: Text('Başvurunuz alınmıştır.'),
+                    //       content: Text('Başvurunuz alınmıştır. En kısa sürede dönüş yapılacaktır.'),
+                    //       actions: [
+                    //         TextButton(
+                    //             onPressed: () {
+                    //               context.replaceRoute(const PersonelProfileRoute());
+                    //             },
+                    //             child: Text(
+                    //               'Tamam',
+                    //               style: TextStyle(
+                    //                   fontSize: 14.sp,
+                    //                   fontWeight: FontWeight.w600,
+                    //                   color: const Color(AppColors.primaryColor),
+                    //                   fontFamily: 'OpenSans'),
+                    //             ))
+                    //       ],
+                    //     );
+                    //   },
+                    // );
+                  }):const Center(
+                    child: CircularProgressIndicator(color: Color(AppColors.primaryColor),),
+                  
+                  ),
               SizedBox(
                 height: 24.h,
               ),
@@ -432,13 +594,13 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
                   onTap: () {
                     context.replaceRoute(const AuthSplashRoute());
                   },
-                  child: Text('Vazgeç',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(AppColors.primaryColor),
-                    fontFamily: 'OpenSans'
-                  ),
+                  child: Text(
+                    'Vazgeç',
+                    style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(AppColors.primaryColor),
+                        fontFamily: 'OpenSans'),
                   ),
                 ),
               )

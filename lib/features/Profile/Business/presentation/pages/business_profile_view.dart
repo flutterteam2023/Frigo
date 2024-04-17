@@ -4,6 +4,8 @@ import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frigo/commonWidgets/profile_info_button.dart';
 import 'package:frigo/constant/app_color.dart';
+import 'package:frigo/features/Authentication/presentation/providers/auth_notifier.dart';
+import 'package:frigo/features/User/provider/user_notifier.dart';
 import 'package:frigo/router/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 @RoutePage()
@@ -11,6 +13,7 @@ class BusinessProfileView extends HookConsumerWidget {
   const BusinessProfileView({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(userProvider);
    return Scaffold(
       backgroundColor: const Color(AppColors.scaffolColor),
       appBar: AppBar(
@@ -41,7 +44,7 @@ class BusinessProfileView extends HookConsumerWidget {
                   decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xffE6F0F2)),
                   child: Center(
                     child: Text(
-                      'Ö',
+                   state.businessModel!=null?    state.businessModel!.businessName![0]: '',
                       style: TextStyle(
                         fontSize: 34.sp,
                         fontWeight: FontWeight.w400,
@@ -56,7 +59,7 @@ class BusinessProfileView extends HookConsumerWidget {
               ),
               Center(
                 child: Text(
-                  'Örnek İşletme',
+                state.businessModel!=null?  state.businessModel!.businessName ?? '': '',
                   style: TextStyle(
                     fontFamily: 'OpenSans',
                     fontSize: 16.sp,
@@ -143,6 +146,8 @@ class BusinessProfileView extends HookConsumerWidget {
               Center(
                 child: Bounceable(
                   onTap: () {
+                    ref.read(userProvider.notifier).signOut(context);
+
                     
                   },
                   child: Text('Çıkış Yap',

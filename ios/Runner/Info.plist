@@ -14,8 +14,16 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>frigo</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow access to camera</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Allow access to microphone for video recording</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allow access to photo library</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs access to location when open.</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
@@ -26,6 +34,11 @@
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
+	<dict>
+  	<key>YourPurposeKey</key>
+  	<string>The example App requires temporary access to the device&apos;s precise location.</string>
+	</dict>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
