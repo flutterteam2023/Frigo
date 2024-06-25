@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:frigo/features/Authentication/presentation/pages/CreatePassword/create_password_view.dart';
@@ -24,6 +26,8 @@ import 'package:frigo/features/Profile/Personel/presentation/pages/personel_prof
 import 'package:frigo/features/Profile/Personel/presentation/pages/security_view.dart';
 import 'package:frigo/features/Splash/presentation/pages/easy_splash_view.dart';
 import 'package:frigo/features/Town/presentation/pages/town_select_view.dart';
+import 'package:frigo/features/UserAgreement/private_politica_view.dart';
+import 'package:frigo/features/UserAgreement/user_agreement_view.dart';
 import 'package:frigo/features/splash/presentation/pages/splash_view.dart';
 
 
@@ -60,6 +64,8 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: ProfileSettingsRoute.page, initial: false),
     AutoRoute(page: TownSelectRoute.page, initial: false),
     AutoRoute(page: HomeRoute.page, initial: false),
+    AutoRoute(page: UserAgreementRoute.page, initial: false),
+    AutoRoute(page: PrivatePoliticaRoute.page, initial: false),
     
 
 

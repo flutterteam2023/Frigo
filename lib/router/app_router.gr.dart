@@ -122,6 +122,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const PersonelProfileView(),
       );
     },
+    PrivatePoliticaRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const PrivatePoliticaView(),
+      );
+    },
     ProfileSettingsRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -168,6 +174,12 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const UpgradeSubscriptionView(),
+      );
+    },
+    UserAgreementRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const UserAgreementView(),
       );
     },
   };
@@ -442,6 +454,20 @@ class PersonelProfileRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [PrivatePoliticaView]
+class PrivatePoliticaRoute extends PageRouteInfo<void> {
+  const PrivatePoliticaRoute({List<PageRouteInfo>? children})
+      : super(
+          PrivatePoliticaRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'PrivatePoliticaRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [ProfileSettingsView]
 class ProfileSettingsRoute extends PageRouteInfo<void> {
   const ProfileSettingsRoute({List<PageRouteInfo>? children})
@@ -549,6 +575,20 @@ class UpgradeSubscriptionRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'UpgradeSubscriptionRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [UserAgreementView]
+class UserAgreementRoute extends PageRouteInfo<void> {
+  const UserAgreementRoute({List<PageRouteInfo>? children})
+      : super(
+          UserAgreementRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'UserAgreementRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

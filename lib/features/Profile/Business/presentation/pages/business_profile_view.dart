@@ -4,7 +4,6 @@ import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frigo/commonWidgets/profile_info_button.dart';
 import 'package:frigo/constant/app_color.dart';
-import 'package:frigo/features/Authentication/presentation/providers/auth_notifier.dart';
 import 'package:frigo/features/User/provider/user_notifier.dart';
 import 'package:frigo/router/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -128,11 +127,15 @@ class BusinessProfileView extends HookConsumerWidget {
                         SizedBox(
                           height: 4.h,
                         ),
-                        ProfileInfoButton(title: 'Kullanıcı Sözleşmesi', onTap: () {}),
+                        ProfileInfoButton(title: 'Kullanıcı Sözleşmesi', onTap: () {
+                          context.pushRoute(const UserAgreementRoute());
+                        }),
                         SizedBox(
                           height: 16.h,
                         ),
-                        ProfileInfoButton(title: 'Gizlilik Politikası', onTap: () {}),
+                        ProfileInfoButton(title: 'Gizlilik Politikası', onTap: () {
+                          context.pushRoute(const PrivatePoliticaRoute());
+                        }),
                       ],
                     ),
                   ],

@@ -2,9 +2,8 @@ import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,8 +12,9 @@ import 'package:frigo/commonWidgets/auth_text_field.dart';
 import 'package:frigo/commonWidgets/custom_filled_button.dart';
 import 'package:frigo/constant/app_color.dart';
 import 'package:frigo/features/Authentication/presentation/providers/auth_notifier.dart';
+import 'package:frigo/features/Home/presentation/providers/home_notifier.dart';
+import 'package:frigo/features/User/provider/user_notifier.dart';
 import 'package:frigo/router/app_router.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 // import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -31,35 +31,9 @@ class CompanyApplicationSkipView extends StatefulHookConsumerWidget {
 
 class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationSkipView> {
   int? selectedOption = 0;
-  String _latitude = '';
-  String _longitude = '';
+
   final List<XFile> images = [];
   final _auth = FirebaseAuth.instance;
-
-  @override
-  void initState() {
-    getCurrentLocation();
-    super.initState();
-  }
-
-  Future<void> getCurrentLocation() async {
-    try {
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        print("No permission, requesting one");
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.deniedForever) {
-          return Future.error('Location Not Available');
-        }
-      }
-      print("Found permission to get location");
-      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
-      _latitude = position.latitude.toString();
-      _longitude = position.longitude.toString();
-    } catch (e) {
-      print(e);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,12 +43,20 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
     final companyNameController = useTextEditingController();
     final descriptionController = useTextEditingController();
     final phoneController = useTextEditingController();
+    // final latController = useTextEditingController();
+    // final longController = useTextEditingController();
+    final addressController = useTextEditingController();
 
     final businessType = useState('Konaklama');
 
     final formKey = GlobalKey<FormState>();
     final formkeyDescription = GlobalKey<FormState>();
     final formkeyCompanyName = GlobalKey<FormState>();
+    final formkeyAddress = GlobalKey<FormState>();
+
+    ValueNotifier<String> lat = useState('');
+    ValueNotifier<String> long = useState('');
+
     final state = ref.watch(authProvider);
 
     return Scaffold(
@@ -135,16 +117,20 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
                 height: 5.h,
               ),
               DropdownButtonFormField(
-                decoration: const InputDecoration(
+                decoration:  InputDecoration(
+                  
                   enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(30.r)),
                     //<-- SEE HERE
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Color(AppColors.borderColor),
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(30.r)),
+
                     //<-- SEE HERE
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Color(AppColors.borderColor),
                     ),
                   ),
@@ -303,39 +289,108 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
               SizedBox(
                 height: 17.h,
               ),
-              Bounceable(
-                onTap: () {
-                  getCurrentLocation();
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5.r),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 33.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset('assets/svg/location-outline.svg'),
-                        SizedBox(
-                          width: 16.w,
-                        ),
-                        Text(
-                          _latitude == " " && _longitude == " "
-                              ? 'Konum Paylaş'
-                              : "Latitude: $_latitude \nLongitude: $_longitude",
-                          style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(AppColors.primaryColor),
-                              fontFamily: 'OpenSans'),
-                        ),
-                      ],
-                    ),
-                  ),
+              Form(
+                key: formkeyAddress,
+                child: AuthTextField(
+                  validator: (p0) {
+                    if (p0!.isEmpty) {
+                      return 'Açık Adres boş bırakılamaz';
+                    }
+                  },
+                  text: 'Açık Adres',
+                  hintText: 'Örn: İhsaniye Mahallesi, Afyonkarahisar',
+                  keyboardType: TextInputType.multiline,
+                  obscureText: null,
+                  controller: addressController,
                 ),
               ),
+              SizedBox(
+                height: 10.h,
+              ),
+              ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(const Color(AppColors.primaryColor)),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.r))),
+                  ),
+                  onPressed: () async {
+                    if (addressController.value.text.isNotEmpty) {
+                      lat.value = '';
+                      long.value = '';
+                      final result = await ref.read(homeProvider.notifier).getLatLong(addressController.value.text);
+                      lat.value = result.lat.toString();
+                      long.value = result.lon.toString();
+                      if (lat.value=="0" && long.value=="0") {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Konumu Alamadık.Adresi kontrol edin veya adresi daha açık bir şekilde yazın.')));
+                        
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Adres boş bırakılamaz')));
+                      
+                    }
+                  },
+                  child: Text(
+                    'Konum Al',
+                    style: TextStyle(
+                        fontSize: 14.sp, fontWeight: FontWeight.w600, color: Colors.white, fontFamily: 'OpenSans'),
+                  )),
+              SizedBox(
+                height: 24.h,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Latitude: ${lat.value}',
+                    style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(AppColors.textLightColor),
+                        fontFamily: 'OpenSans'),
+                  ),
+                  Text(
+                    'Longitude: ${long.value}',
+                    style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(AppColors.textLightColor),
+                        fontFamily: 'OpenSans'),
+                  ),
+                ],
+              ),
+              // Form(
+              //   key: formkeyLatLong,
+              //   child: Column(
+              //     children: [
+              //       AuthTextField(
+              //           validator: (p0) {
+              //             if (p0!.isEmpty) {
+              //               return 'Latitude boş bırakılamaz';
+              //             } else {
+              //               return null;
+              //             }
+              //           },
+              //           text: 'Latitude',
+              //           hintText: 'Örn (37.6873135)',
+              //           keyboardType: TextInputType.multiline,
+              //           obscureText: null,
+              //           controller: latController),
+              //       SizedBox(height: 24.h),
+              //       AuthTextField(
+              //           validator: (p0) {
+              //             if (p0!.isEmpty) {
+              //               return 'Longitude boş bırakılamaz';
+              //             } else {
+              //               return null;
+              //             }
+              //           },
+              //           text: 'Longitude',
+              //           hintText: 'Örn (30.8952767)',
+              //           keyboardType: TextInputType.multiline,
+              //           obscureText: null,
+              //           controller: longController),
+              //     ],
+              //   ),
+              // ),
               SizedBox(
                 height: 32.h,
               ),
@@ -397,15 +452,22 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
                           )
                         : Bounceable(
                             onTap: () {
-                              final picker = ImagePicker().pickImage(source: ImageSource.gallery);
-                              picker.then((value) {
-                                if (value != null) {
-                                  setState(() {
-                                    images.add(value);
-                                    print(images.length);
-                                  });
-                                }
-                              });
+                              if (images.length < 2) {
+                                final picker = ImagePicker().pickImage(source: ImageSource.gallery);
+                                picker.then((value) {
+                                  if (value != null) {
+                                    setState(() {
+                                      images.add(value);
+                                      if (kDebugMode) {
+                                        print(images.length);
+                                      }
+                                    });
+                                  }
+                                });
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(content: Text('En fazla 2 görsel ekleyebilirsiniz')));
+                              }
                             },
                             child: Container(
                               width: 102.r,
@@ -533,59 +595,73 @@ class _CompanyApplicationSkipViewState extends ConsumerState<CompanyApplicationS
               SizedBox(
                 height: 64.h,
               ),
-           state.isLoading==false?   CustomFilledButton(
-                  text: 'Başvur',
-                  onTap: () async {
-                    if (formKey.currentState!.validate() &&
-                        formkeyDescription.currentState!.validate() &&
-                        formkeyCompanyName.currentState!.validate() &&
-                        selectedOption != null) {
-                     
-                      await ref.read(authProvider.notifier).registerBusiness(
-                        widget.email,
-                        widget.password,
-                        images,
-                       companyNameController.value.text,
-                          businessType.value,
-                          descriptionController.value.text,
-                          phoneController.value.text,
-                          isSwitched.value,
-                          _latitude,
-                          _longitude,
-                          selectedOption!,
-                          context
-                      );
-                      print('Başvuruldu');
-                    } else {
-                      print('Başvuru yapılamadı');
-                    }
-                    // return showDialog(
-                    //   context: context,
-                    //   builder: (context) {
-                    //     return AlertDialog(
-                    //       title: Text('Başvurunuz alınmıştır.'),
-                    //       content: Text('Başvurunuz alınmıştır. En kısa sürede dönüş yapılacaktır.'),
-                    //       actions: [
-                    //         TextButton(
-                    //             onPressed: () {
-                    //               context.replaceRoute(const PersonelProfileRoute());
-                    //             },
-                    //             child: Text(
-                    //               'Tamam',
-                    //               style: TextStyle(
-                    //                   fontSize: 14.sp,
-                    //                   fontWeight: FontWeight.w600,
-                    //                   color: const Color(AppColors.primaryColor),
-                    //                   fontFamily: 'OpenSans'),
-                    //             ))
-                    //       ],
-                    //     );
-                    //   },
-                    // );
-                  }):const Center(
-                    child: CircularProgressIndicator(color: Color(AppColors.primaryColor),),
-                  
-                  ),
+              state.isLoading == false
+                  ? CustomFilledButton(
+                      text: 'Başvur',
+                      onTap: () async {
+                        if (formKey.currentState!.validate() &&
+                            formkeyDescription.currentState!.validate() &&
+                            formkeyCompanyName.currentState!.validate() &&
+                            formkeyAddress.currentState!.validate() &&
+                            selectedOption != 0 && images.isNotEmpty && businessType.value.isNotEmpty&&lat.value.isNotEmpty&&long.value.isNotEmpty&&lat.value!="0"&&long.value!="0") {
+                          await ref
+                              .read(authProvider.notifier)
+                              .registerBusiness(
+                                  widget.email,
+                                  widget.password,
+                                  images,
+                                  companyNameController.value.text,
+                                  businessType.value,
+                                  descriptionController.value.text,
+                                  phoneController.value.text,
+                                  isSwitched.value,
+                                  lat.value,
+                                  long.value,
+                                  selectedOption!,
+                                  context,addressController.value.text)
+                              .then((value) async {
+                            await ref.read(userProvider);
+                          });
+                          print('Başvuruldu');
+                        } else if (lat.value=="0" && long.value=="0") {
+                           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Konumu Alamadık.Adresi kontrol edin veya adresi daha açık bir şekilde yazın.')));
+                        }else if( images.isEmpty){
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('En az 1 görsel eklemelisiniz')));
+
+                        }else if (selectedOption == 0) {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Abonelik zamanını seçmelisiniz')));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Tüm alanları doldurmalısınız')));
+                        }
+                        // return showDialog(
+                        //   context: context,
+                        //   builder: (context) {
+                        //     return AlertDialog(
+                        //       title: Text('Başvurunuz alınmıştır.'),
+                        //       content: Text('Başvurunuz alınmıştır. En kısa sürede dönüş yapılacaktır.'),
+                        //       actions: [
+                        //         TextButton(
+                        //             onPressed: () {
+                        //               context.replaceRoute(const PersonelProfileRoute());
+                        //             },
+                        //             child: Text(
+                        //               'Tamam',
+                        //               style: TextStyle(
+                        //                   fontSize: 14.sp,
+                        //                   fontWeight: FontWeight.w600,
+                        //                   color: const Color(AppColors.primaryColor),
+                        //                   fontFamily: 'OpenSans'),
+                        //             ))
+                        //       ],
+                        //     );
+                        //   },
+                        // );
+                      })
+                  : const Center(
+                      child: CircularProgressIndicator(
+                        color: Color(AppColors.primaryColor),
+                      ),
+                    ),
               SizedBox(
                 height: 24.h,
               ),

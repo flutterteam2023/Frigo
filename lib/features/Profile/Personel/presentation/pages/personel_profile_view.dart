@@ -19,7 +19,7 @@ class PersonelProfileView extends HookConsumerWidget {
     return Scaffold(
       backgroundColor: const Color(AppColors.scaffolColor),
       appBar: AppBar(
-        leading:  IconButton(
+        leading: IconButton(
           onPressed: () {
             context.replaceRoute(const HomeRoute());
           },
@@ -47,7 +47,7 @@ class PersonelProfileView extends HookConsumerWidget {
                   decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xffE6F0F2)),
                   child: Center(
                     child: Text(
-                      'A',
+                      profileState.userModel!.name!.substring(0, 1).toUpperCase(),
                       style: TextStyle(
                         fontSize: 34.sp,
                         fontWeight: FontWeight.w400,
@@ -62,7 +62,7 @@ class PersonelProfileView extends HookConsumerWidget {
               ),
               Center(
                 child: Text(
-              profileState.userModel!=null?    profileState.userModel!.name ?? '':"",
+                  profileState.userModel != null ? profileState.userModel!.name ?? '' : "",
                   style: TextStyle(
                     fontFamily: 'OpenSans',
                     fontSize: 16.sp,
@@ -113,11 +113,15 @@ class PersonelProfileView extends HookConsumerWidget {
                         SizedBox(
                           height: 4.h,
                         ),
-                        ProfileInfoButton(title: 'Kullanıcı Sözleşmesi', onTap: () {}),
+                        ProfileInfoButton(title: 'Kullanıcı Sözleşmesi', onTap: () {
+                          context.pushRoute(const UserAgreementRoute());
+                        }),
                         SizedBox(
                           height: 16.h,
                         ),
-                        ProfileInfoButton(title: 'Gizlilik Politikası', onTap: () {}),
+                        ProfileInfoButton(title: 'Gizlilik Politikası', onTap: () {
+                          context.pushRoute(const PrivatePoliticaRoute());
+                        }),
                       ],
                     ),
                   ],
@@ -126,63 +130,79 @@ class PersonelProfileView extends HookConsumerWidget {
               SizedBox(
                 height: 30.h,
               ),
-              Center(
-                child: Bounceable(
-                  onTap: (){
+              Bounceable(
+                onTap: () {
                   ref.read(userProvider.notifier).businessApplication(context);
-
-
-                  },
-                  child: Text('İşletme başvurusu yapmak istiyorum.',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(AppColors.primaryColor),
-                    fontFamily: 'OpenSans'
-                  ),
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(left: 16.w, right: 16.w),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30.r),
+                        color: Colors.white,
+                        border: Border.all(color: const Color(AppColors.primaryColor), width: 1.w)),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
+                      child: Center(
+                        child: Text(
+                          'İşletme başvurusu yapmak istiyorum.',
+                          style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(AppColors.primaryColor),
+                              fontFamily: 'OpenSans'),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
               SizedBox(
                 height: 50.h,
               ),
-
-            state.isLoading==false?  Center(
-                child: Bounceable(
-                  onTap: () {
-                    ref.read(userProvider.notifier).signOut(context);
-                    
-                  },
-                  child: Text('Çıkış Yap',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w400,
-                    color: const Color(0xffC85C0C),
-                    fontFamily: 'OpenSans'
-                  ),
-                  ),
-                ),
-              ):const Center(
-                child: CircularProgressIndicator(color: Color(AppColors.primaryColor),),),
-              SizedBox(height: 20.h,),
+              state.isLoading == false
+                  ? Center(
+                      child: Bounceable(
+                        onTap: () {
+                          ref.read(userProvider.notifier).signOut(context);
+                        },
+                        child: Text(
+                          'Çıkış Yap',
+                          style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xffC85C0C),
+                              fontFamily: 'OpenSans'),
+                        ),
+                      ),
+                    )
+                  : const Center(
+                      child: CircularProgressIndicator(
+                        color: Color(AppColors.primaryColor),
+                      ),
+                    ),
+              SizedBox(
+                height: 20.h,
+              ),
               Center(
-                child: Text('Frig-o V1.0',
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w300,
-                  color: const Color(0xff858585),
-                  fontFamily: 'OpenSans'
-                ),  
+                child: Text(
+                  'Frig-o V1.0',
+                  style: TextStyle(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w300,
+                      color: const Color(0xff858585),
+                      fontFamily: 'OpenSans'),
                 ),
               ),
               Center(
-                child: Text('2023 Tüm hakları saklıdır.',
-                style: TextStyle(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w300,
-                    color: const Color(0xff858585),
-                    fontFamily: 'OpenSans'
-                  ),
+                child: Text(
+                  '2023 Tüm hakları saklıdır.',
+                  style: TextStyle(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w300,
+                      color: const Color(0xff858585),
+                      fontFamily: 'OpenSans'),
                 ),
               )
             ],
@@ -192,4 +212,3 @@ class PersonelProfileView extends HookConsumerWidget {
     );
   }
 }
-

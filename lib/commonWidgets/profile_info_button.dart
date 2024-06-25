@@ -18,11 +18,19 @@ class ProfileInfoButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xff000000).withOpacity(0.1),
+              blurRadius: 10.r,
+              offset: const Offset(0, 2),
+            ),
+          ],
           color: Colors.white,
-          borderRadius: BorderRadius.circular(10.r),
+          borderRadius: BorderRadius.circular(30.r),
+          
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 15.h),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

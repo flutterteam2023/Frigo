@@ -42,6 +42,8 @@ class AuthTextField extends StatelessWidget {
           controller: controller,
           obscureText:obscureText!=null? obscureText!:false,
           keyboardType: keyboardType,
+          
+          
           cursorColor: const Color(AppColors.primaryColor),
           decoration: InputDecoration(
             filled: true,
@@ -62,22 +64,24 @@ class AuthTextField extends StatelessWidget {
               color: const Color(AppColors.textLightColor),
               fontFamily: 'OpenSans'
             ),
+            
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.r),
+              
+              borderRadius: BorderRadius.circular(30.r),
               borderSide: BorderSide(
                 color: const Color(AppColors.borderColor),
                 width: 1.w
               )
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.r),
+              borderRadius: BorderRadius.circular(30.r),
               borderSide: BorderSide(
                 color: const Color(AppColors.borderColor),
                 width: 1.w
               )
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.r),
+              borderRadius: BorderRadius.circular(30.r),
               borderSide: BorderSide(
                 color: const Color(AppColors.borderColor),
                 width: 1.w

@@ -17,6 +17,7 @@ final userProvider = NotifierProvider.autoDispose<UserNotifier, UserState>(UserN
 class UserNotifier extends AutoDisposeNotifier<UserState> {
   @override
   UserState build() {
+    getUser();
 
     return UserState.initial();
     

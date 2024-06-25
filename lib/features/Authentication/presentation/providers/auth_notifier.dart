@@ -12,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frigo/constant/app_color.dart';
 import 'package:frigo/features/Authentication/data/model/business_model.dart';
 import 'package:frigo/features/Authentication/presentation/states/auth_states.dart';
+import 'package:frigo/features/Home/presentation/pages/home_view.dart';
 import 'package:frigo/features/User/states/user_state.dart';
 import 'package:frigo/router/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -54,7 +55,8 @@ class AuthNotifier extends AutoDisposeNotifier<AuthState> {
           ),
         ),
       );
-      context.replaceRoute(const AuthSplashRoute());
+      // context.replaceRoute(const AuthSplashRoute());
+     await loginUser(email, password, context);
     } on FirebaseAuthException catch (e) {
       state = state.copyWith(isLoading: false);
       // ignore: use_rethrow_when_possible
@@ -89,7 +91,8 @@ class AuthNotifier extends AutoDisposeNotifier<AuthState> {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password).then((value) {
         state = state.copyWith(isLoading: false);
-        context.replaceRoute(const HomeRoute());
+          context.router.replaceAll([const HomeRoute()]);
+
       });
     } on FirebaseAuthException catch (e) {
       state = state.copyWith(isLoading: false);
@@ -229,6 +232,7 @@ class AuthNotifier extends AutoDisposeNotifier<AuthState> {
     String long,
     int subscription,
     BuildContext context,
+    String address
   ) async {
     state = state.copyWith(isLoading: true);
 
@@ -259,7 +263,8 @@ class AuthNotifier extends AutoDisposeNotifier<AuthState> {
         'email': email,
         'startDate': DateTime.now(),
         'endDate': null,
-        'userType': 'business'
+        'userType': 'business',
+        'address': address
       });
     } catch (e) {
       if (kDebugMode) {
@@ -271,7 +276,8 @@ class AuthNotifier extends AutoDisposeNotifier<AuthState> {
     }
 
     state = state.copyWith(isLoading: false);
-    context.replaceRoute(const HomeRoute());
+   context.router.replaceAll([const HomeRoute()]);
+
   }
 
   Future<String> _uploadImageToFirebaseStorage(XFile imageFile, String userId) async {
